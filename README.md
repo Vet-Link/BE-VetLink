@@ -1,6 +1,6 @@
 # Back End Design
 
-<div align="center">
+<div align="left">
   <h2>ERD Diagram</h2>
   <p>Here is our ERD <a href="https://drive.google.com/file/d/1c2_tKNVprqd59gwemdcmfnxYQ8jhEJom/view?usp=sharing">ER diagram</a></p>
   <h2>ERD Diagram</h2>
