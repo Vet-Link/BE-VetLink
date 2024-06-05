@@ -1,15 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const routes = require('./route');
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (req, res) => {
-    console.log("Response success");
-    res.send("Response Success!");
-});
+app.use(routes)
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
