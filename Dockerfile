@@ -9,5 +9,8 @@ RUN npm install
 COPY . .
 
 ENV PORT=8000
+ENV SECRETKEY=
+ENV HOST=
+ENV PASS=
 
 CMD ["npm", "start"]
