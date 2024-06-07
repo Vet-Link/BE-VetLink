@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 const validator = require('validator');
 
 const { storeDataRegis } = require("../db/storeData");
@@ -83,7 +83,7 @@ async function userRegistration(req, res) {
         }
 
         //if passed all the requirement
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, process.env.SALT);
         const userData = {
             ID, username, email, hashedPassword, time,
         }

@@ -1,13 +1,7 @@
-const { Firestore } = require('@google-cloud/firestore');
 const jwt = require("jsonwebtoken");
 const sendEmail = require('./sendEmail');
-
-
-const db = new Firestore({
-  projectId: 'vetlink-425416',
-  keyFilename: './service-key-firestore.json',
-  databaseId: 'patient-db',
-});
+const message = require('./emailMassage');
+const db = require('../db/initializeDB');
 
 async function sendVerificationEmail(email, username, ID) {
     try {
@@ -21,12 +15,8 @@ async function sendVerificationEmail(email, username, ID) {
         const url = `http://localhost:8000/${ID}/verify/${token}`;
         
         // Compose Email Message
-        const subject = "Please Verify Email";
-        const message = `
-            <h3>Hello ${username}</h3>
-            <p>Thank you for registering for our services.</p>
-            <p>Click <a href="${url}">here</a> to verify your email.</p>
-        `;
+        const subject = "Please Verify Your Email From VetLink";
+        message(username, url);
         
         // Send Email (you need to implement this function)
         await sendEmail(email, subject, message);
