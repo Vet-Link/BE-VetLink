@@ -1,3 +1,5 @@
+const Joi = require('joi');
+
 function isUsernameTooShort(username) {
     // Check if username is at least 5 characters long
     if (username.length < 5) {
@@ -25,27 +27,31 @@ function isUsernameHasSymbol(username) {
         return true;
     }
 }
+  
+const passwordSchema = Joi.string()
+    .min(8)
+    .max(30)
+    .pattern(new RegExp('^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};\'":,.<>\\/?]+$'))
+    .message('Password must be between 8 and 30 characters long, and contain only letters, numbers, or special characters.')
+    .required()
+    .messages({
+        'string.base': 'Password should be a type of text',
+        'string.empty': 'Password cannot be empty',
+        'string.min': 'Password should have a minimum length of 8',
+        'string.max': 'Password should have a maximum length of 30',
+        'any.required': 'Password is required'
+    });
 
-function isEmailValid(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if(emailRegex.test(email)) {
-        return false;
-    } else {
-        return true;
+const validatePassword = (password) => {
+    const { error } = passwordSchema.validate(password);
+    if (error) {
+        throw new Error(error.details[0].message);
     }
-}
-
-function isPasswordValid(password) {
-    if(password.length >= 8) {
-        return false;
-    } else {
-        return true;
-    }
-}
+};
 
 module.exports = {
     isUsernameTooShort,
     isUsernameTooLong,
     isUsernameHasSymbol,
-    isPasswordValid,
+    validatePassword,
 }
