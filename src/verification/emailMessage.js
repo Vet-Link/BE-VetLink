@@ -1,4 +1,4 @@
-const message = (username, url) => `
+const verificationMessage = (username, url) => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,7 +23,9 @@ const message = (username, url) => `
         <div class="content">
             <h1>Verify Your Email Address</h1>
             <h3>Hello ${username}</h3>
-            <p>Thank you for signing up with VetLink! Please click the button below to verify your email address:</p>
+            <p>Thank you for signing up with VetLink!</p>
+            <p>If you don't feel like registering yourself with our service, please ignore this email.</p>
+            <p>Click the button below to verify your email address:</p>
             <p>Click <a href="${url}">here</a> to verify your email.</p>
             <p>Thank you for registering for our services.</p>
         </div>
@@ -36,4 +38,4 @@ const message = (username, url) => `
 </html>
 `;
 
-module.exports = message;
+module.exports = verificationMessage;

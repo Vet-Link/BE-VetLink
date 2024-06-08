@@ -1,6 +1,7 @@
 const { isEmailUnique, searchDataByEmail } = require("../../db/getData");
 const bcrypt = require("bcrypt");
 const validator = require('validator');
+const jwt = require("jsonwebtoken");
 
 async function userLogin(req, res) {
     const { email, password } = req.body;
@@ -49,7 +50,7 @@ async function userLogin(req, res) {
         });
     } catch (error) {
         res.status(500).send({
-            message: 'internal server error'
+            message: 'internal server error' + error.message,
         })
     }
 }
