@@ -1,5 +1,6 @@
 const express = require('express');
-const { userRegistration } = require('./regisHandler');
+const { userRegistration } = require('../user/pet owner/regisHandler');
+const { userLogin } = require('../user/pet owner/loginHandler');
 const emailLinkVerificator = require('../verification/verifiedFromEmailLink');
 const router = express.Router();
 
@@ -10,6 +11,7 @@ router.get('/', (req, res) => {
 });
 
 //Registration route
+router.post('/loginUser', userLogin)
 router.post('/regisUser', userRegistration);
 router.get('/:id/verify/:token', emailLinkVerificator);
 
