@@ -7,7 +7,7 @@ const verificationMessage = require('./emailMessage');
 async function sendVerificationEmail(email, username, ID) {
     try {
         // Generate JWT Token
-        const token = jwt.sign({ email: email, _id: ID }, process.env.SECRETKEY, { expiresIn: "1h" });
+        const token = jwt.sign({ email: email, _id: ID }, process.env.SECRETKEY, { expiresIn: "3m" });
         
         // Save token to Firestore
         const createdAt = Firestore.FieldValue.serverTimestamp();

@@ -24,7 +24,7 @@ const resetPwMessage = (verificationCode) => `
             <h1>Password reset authentication</h1>
             <h3>Never share this code anyone</h3>
             <p>Here is your verification code for your password reset:</p>
-            <p>Click <a href="${verificationCode}">here</a> to verify your email.</p>
+            <p>${verificationCode}</p>
         </div>
         <div class="footer">
             <p>&copy; 2024 VetLink. All rights reserved.</p>
