@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-const message = require("./emailMassage");
 
 async function sendEmail(email,subject,message) {
   try {
@@ -23,16 +22,7 @@ async function sendEmail(email,subject,message) {
     console.log(error)
     return error;
   }
-};
-
-module.exports = sendEmail;
-
-async function main() {
-  const email = 'ardyprasyah@gmail.com';
-  const subject = 'WOILAH ENAK';
-  const msg = message("Synmary", "https://www.google.com")
-  await sendEmail(email, subject, msg);
 }
 
-main();
+module.exports = sendEmail;
 
