@@ -16,10 +16,10 @@ async function sendVerificationEmail(email, username, ID) {
         
         // Compose Email Message
         const subject = "Please Verify Your Email From VetLink";
-        message(username, url);
+        const emailMessage = message(username, url);
         
         // Send Email (you need to implement this function)
-        await sendEmail(email, subject, message);
+        await sendEmail(email, subject, emailMessage);
 
         // Send Response
         return { success: true, message: "An email has been sent to your account. Please check your inbox." };

@@ -2,11 +2,11 @@ const crypto = require('crypto');
 const bcrypt = require("bcrypt");
 const validator = require('validator');
 
-const { storeDataRegis } = require("../db/storeData");
-const getGMT7Date = require("../service/getGMT7Date");
-const { isUsernameUnique, isEmailUnique } = require("../db/getData");
-const { isUsernameTooShort, isUsernameTooLong, isUsernameHasSymbol, isPasswordValid, validatePassword } = require("../service/characterChecker");
-const sendVerificationEmail = require('../verification/sendVerification');
+const { storeDataRegis } = require("../../db/storeData");
+const getGMT7Date = require("../../service/getGMT7Date");
+const { isUsernameUnique, isEmailUnique } = require("../../db/getData");
+const { isUsernameTooShort, isUsernameTooLong, isUsernameHasSymbol, validatePassword } = require("../../service/characterChecker");
+const sendVerificationEmail = require('../../verification/sendVerification');
 
 async function userRegistration(req, res) {
     const { username, email, password, passwordVerify } = req.body;
@@ -83,7 +83,8 @@ async function userRegistration(req, res) {
         }
 
         //if passed all the requirement
-        const hashedPassword = await bcrypt.hash(password, process.env.SALT);
+        const saltRounds = parseInt(process.env.SALT, 10);
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
         const userData = {
             ID, username, email, hashedPassword, time,
         }
