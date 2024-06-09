@@ -6,4 +6,6 @@ const db = new Firestore({
   databaseId: 'patient-db',
 });
 
-module.exports = db;
+const bucket = storage.bucket('your-firebase-storage-bucket-name');
+
+module.exports = { db, bucket };
