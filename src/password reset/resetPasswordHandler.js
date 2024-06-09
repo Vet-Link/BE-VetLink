@@ -33,7 +33,7 @@ async function userResetPasswordReq(req, res) {
         const verificationCode = generateRandomCode();
         const saltRounds = parseInt(process.env.SALT, 10);
         const hashedVerificationCode = await bcrypt.hash(verificationCode, saltRounds);
-        await db.collection('forgot-Password').doc(email).set({ createdAt, email, hashedVerificationCode, token});
+        await db.collection('forgot-password').doc(email).set({ createdAt, email, hashedVerificationCode, token});
 
         // Compose Email Message
         const subject = "VetLink Verification code for your password reset";
@@ -64,7 +64,7 @@ async function userResetPasswordVerification(req, res) {
         //check if the verification code has expired
         if(isTokenExpired(verificationCodeData.token)) {
             // Delete the token document
-            const documentRef = db.collection('forgot-Password').doc(email);
+            const documentRef = db.collection('forgot-password').doc(email);
             documentRef.delete();
           return res.status(403).send({ message: 'Verification failed, varification code has already expired' });
         }

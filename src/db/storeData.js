@@ -11,7 +11,14 @@ async function storeDataPet(ID, petData) {
   await petCollection.doc(petData.petId).set(petData);
 }
 
+async function saveMessageToDatabase(conversationID, messageId, data) {
+  const collectionPath = `messages/${conversationID}/message-data`;
+  const petCollection = db.collection(collectionPath);
+  await petCollection.doc(messageId).set(data);
+}
+
 module.exports = {
     storeDataRegis,
     storeDataPet,
+    saveMessageToDatabase,
 }
