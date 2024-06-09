@@ -19,6 +19,26 @@ async function isUsernameUnique(username, userType) {
   try {
     const snapshot = await collection.where('username', '==', username).get();
     return snapshot.empty;
+const db = require("./initializeDB");
+
+async function isUsernameUnique(username) {
+  const loginInfoCollection = db.collection('login-info');
+
+  try {
+    // Query for documents with the given username
+    const snapshot = await loginInfoCollection.where('username', '==', username).get();
+
+    snapshot.forEach(doc => {
+      //console.log(doc.id, '=>', doc.data());
+    });
+
+    //if unique
+    if (snapshot.empty) {
+      return true;
+    } 
+
+    //if duplicated
+    return false;
   } catch (error) {
     console.error(`Error checking username uniqueness for ${userType}:`, error);
     throw error;
@@ -118,6 +138,57 @@ async function checkDoctorPictureFormat(userId) {
   }
 }
 
+async function getLatestUserDataByEmail(email) {
+  const Collection = db.collection('login-info');
+
+  try {
+    const snapshot = await Collection
+    .where('email', '==', email)
+    .get()
+
+  if (snapshot.empty) {
+    const msg = "No email found";
+    return msg;
+  }
+
+  let latestData;
+  snapshot.forEach(doc => {
+    latestData = doc.data();
+  });
+
+  return latestData;
+
+  } catch (error) {
+    console.error('Error getting latest data for current email:', error);
+    throw error;
+  }
+}
+
+async function getLatestVerificationCodeByEmail(email) {
+  const Collection = db.collection('forgot-Password');
+
+  try {
+    const snapshot = await Collection
+    .where('email', '==', email)
+    .get()
+
+  if (snapshot.empty) {
+    const msg = "No request for password reset for current email";
+    return msg;
+  }
+
+  let latestData;
+  snapshot.forEach(doc => {
+    latestData = doc.data();
+  });
+
+  return latestData;
+  } catch (error) {
+    console.error('Error finding request for password reset for current email:', error);
+    throw error;
+  }
+}
+
 // Function to get exports based on user type
 function getExports(userType) {
   if (userType === 2) { // Doctor
@@ -137,6 +208,12 @@ function getExports(userType) {
   } else {
     throw new Error('Invalid user type');
   }
+module.exports = {
+  isUsernameUnique,
+  isEmailUnique,
+  searchDataByEmail,
+  getLatestUserDataByEmail,
+  getLatestVerificationCodeByEmail,
 }
 
 module.exports = getExports;
