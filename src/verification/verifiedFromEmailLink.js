@@ -1,5 +1,6 @@
 const db = require("../db/initializeDB");
 const jwt = require("jsonwebtoken");
+const isTokenExpired = require("../service/jwtToken");
 
 async function emailLinkVerificator(req, res) {
   try {
@@ -39,20 +40,11 @@ async function emailLinkVerificator(req, res) {
     const documentRef = db.collection('verificationTokens').doc(req.params.id);
     documentRef.delete();
 
-    res.status(200).send({ message: "Email verified successfully" });
+    res.status(200).send({ message: "Email verified successfully. Try logging in" });
   } catch (error) {
     console.error("Error verifying email link:", error);
     res.status(500).send({ message: "Internal server error" });
   }
 };
-
-function isTokenExpired(token) {
-  const decoded = jwt.decode(token);
-  if (!decoded || !decoded.exp) {
-      return true; // Invalid token or no expiration time found
-  }
-  const now = Math.floor(Date.now() / 1000);
-  return decoded.exp < now;
-}
 
 module.exports = emailLinkVerificator;

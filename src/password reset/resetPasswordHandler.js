@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const validator = require('validator');
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const { isEmailUnique, getLatestVerificationCodeByEmail, getLatestUserDataByEmail } = require("../db/getData");
 const db = require('../db/initializeDB');
@@ -25,10 +26,14 @@ async function userResetPasswordReq(req, res) {
             return res.status(409).json({status: 'fail',message: 'Email not found',});
         }
 
+        // Generate JWT Token
+        const token = jwt.sign({ email: email, _id: ID }, process.env.SECRETKEY, { expiresIn: "3m" });
+
+        // Generate random 6 digit code
         const verificationCode = generateRandomCode();
         const saltRounds = parseInt(process.env.SALT, 10);
         const hashedVerificationCode = await bcrypt.hash(verificationCode, saltRounds);
-        await db.collection('forgot-Password').doc(email).set({ createdAt, email, hashedVerificationCode});
+        await db.collection('forgot-Password').doc(email).set({ createdAt, email, hashedVerificationCode, token});
 
         // Compose Email Message
         const subject = "VetLink Verification code for your password reset";
@@ -56,11 +61,20 @@ async function userResetPasswordVerification(req, res) {
         const userId = userData.ID;
         const verificationCodeData = await getLatestVerificationCodeByEmail(email);
 
+        //check if the verification code has expired
+        if(isTokenExpired(verificationCodeData.token)) {
+            // Delete the token document
+            const documentRef = db.collection('forgot-Password').doc(email);
+            documentRef.delete();
+          return res.status(403).send({ message: 'Verification failed, varification code has already expired' });
+        }
+
         //check verification code
         const validPassword = await bcrypt.compare(verificationCode, verificationCodeData.hashedVerificationCode);
         if (!validPassword) {
-            return res.status(403).send({status: 'error',message: 'Verification failed. Wrong code entered.',});
+            return res.status(403).send({status: 'error',message: 'Verification failed, Wrong code entered.',});
         }
+
         // Update the user document to mark it to be allowed to do password reset
         await db.collection('login-info').doc(userId).update({ passwordReset: true });
 
