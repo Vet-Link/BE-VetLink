@@ -10,7 +10,13 @@ async function storeDataPet(ID, petData) {
   return predictCollection.doc(ID).set(petData);
 }
 
+async function storeDataDoctor(ID, doctorData) { 
+  const predictCollection = db.collection('doctor-data');
+  return predictCollection.doc(ID).set(doctorData);
+}
+
 module.exports = {
     storeDataRegis,
     storeDataPet,
+    storeDataDoctor
 }
