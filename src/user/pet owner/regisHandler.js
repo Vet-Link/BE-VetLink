@@ -88,17 +88,25 @@ async function userRegistration(req, res) {
         const userData = {
             ID, username, email, hashedPassword, time,
         }
-        //store user data
-        await storeDataRegis(ID, userData);
 
         //send email verification
         const emailResult = await sendVerificationEmail(email, username, ID);
+
+        if(!emailResult.success) {
+            return res.status(500).json({
+                status: 'fail',
+                message: 'Data failed to be registered. ' + emailResult.message,
+            });
+        }
+
+        //store user data
+        await storeDataRegis(ID, userData);
 
         return res.status(200).json({
             status: 'success',
             message: 'Data sucessfully registered. ' + emailResult.message,
         });
-        
+
         //Kirim status handler ke database
         //const statusMSG = `User ID ${ID} is created`;
         //const statusId = crypto.randomUUID();
