@@ -1,0 +1,13 @@
+{
+    "type": "service_account",
+    "project_id": "vetlink-425416",
+    "private_key_id": "4243cf6d28042ca744fab25d067d204168a158a9",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCmqO0H0TNU+biB\nNGw1BCQ9BqY15NH3gzIY75Bv8amtyu0EdeJhBFC7VxKUxyccAiYZA3Y31xAPKR0p\nu8fOAW9Ce/CWDoICGLFq/IZK21oJsw8vI/zMs/JkKzKBTMeeSoSri1gmytvkMOCX\nZRclGhawqwnqGP85FjXh9nrWK+hVvNPk2VRHK9rNhLkYveOR3sjIkSsIlsPuDOlT\nyhEbAoV2+cR3rNGAP6Z0Itwf37R5rWBU9yswLdL3U66xvL1jHi/HIklAN0aOxx/o\nmyJ0vtW3HY+cuYcOWBydGiy6hyimS9qzr534xsGGCmJgk9gKn5rXqC6furgwoWAQ\nje+WmxuVAgMBAAECggEAEPFSa32GiOh8K9Ju/7LEllmjMw5olA+H28Ya+m5ocA0V\nrGLpmTBNnsX60xot7SiAxAE4lvOro8bruo7nAJffvjQIYNDnwZvOCZDTfC+xhxPn\ngsTXUd4nUaycjU2Ha52qwB/B3eu4kAmyA2IZCMIOtXYl42EYLS8HWknq8fPzwidu\nkprbkvWrrwFkU3V0Wf9Bi153bfVCcyxP9xi7plsYLEv0ACKd0CTmdk+FUoIZ7JN2\naf0SWpl/vdY/S3oTqStUfEwM7VsAMytnfmMzvEl2cDV32JqbLef0yRYjbyiyj82d\nLkhnLxdXU8KWWUKUaOgWrHmu7zKnjwgBfhnADvKJwQKBgQDclyrQyxKNcEwYzUnD\nfYKi3T/TUeM6LhB7PinnysoCv2OxDcqyKSEjAXNq7r9uZNMZ5Fz8vyX4MBMKsHIn\nT4XsyaN3DxYAs2KX4C8dEsOLnp1Hg5RMURM1dcpPXgsYU7kJnr8NwFmbMmeqyjMY\n3DZD5css4EU4ichYH2/GJLPQNQKBgQDBaY+dI8qCHRHESNlmKrMK3Sh3m8ctIaZa\n21QrHaohGuhPnuJ9S9Vjc69cNhXwtze5Bas1lPGOOYuP+j7XqCldMMVW+D749sj3\nKcQ39+eMz/q3t5ufRnnh3l3tVZAwgKzyF4yfr7GML1QFRHXuXdOn4ew+09H+neR6\n/50R/6pJ4QKBgBIPtou99Njr1u8478832ZhoMS+mRsqetu7AWkIGUqAC97Cphm0r\n/PCWz9Jzlez+CGLYVdzD8eHuXcDETbR2SGro35+B9rU7+tignHru7F/kLtCKL3xI\nLyBzcospEhN912q4OsBvfWa9q8tKHwDsFu1cRVR5UHGepm7AtDAvFSH5AoGBAJns\nJHruTO+XqtgHEdyZBrwSnW3y72Qfb4DHJAjcJtUJ0O/shlsoyr3HBzvfXz6e0R3S\nQRr3WfXSHhuLEBAYqDKd6a75CUShQfZRqvLPu9r4eZNT7+ml8MGschu7CHFRNlHE\nJAnBjQ7/a2J1xVTaHuNwjM7DTE/R4E9ytdHpIeCBAoGANIaIkFpg50rkfEycvpta\nzVjCLUGn/OZ3KCjcFSFVnQ/KCtsh8rRQfGuwpl5TMW1gyWVji5I6TKb77Q9x6eGR\nTuTrAzR2RqT4Fcx/4nw/XErHFz/goi5AKb0Nh1f/s2/7B2zEvfIiJlnkUy8mBeQQ\nrwRH77k5UT7APh/EJGX1Q0U=\n-----END PRIVATE KEY-----\n",
+    "client_email": "bucket-access@vetlink-425416.iam.gserviceaccount.com",
+    "client_id": "117188845647136083653",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/bucket-access%40vetlink-425416.iam.gserviceaccount.com",
+    "universe_domain": "googleapis.com"
+  }

@@ -1,8 +1,9 @@
 const { isEmailUnique, searchDataByEmail } = require("../../db/getData");
 const bcrypt = require("bcrypt");
 const validator = require('validator');
+const jwt = require("jsonwebtoken");
 
-async function userLogin(req, res) {
+async function docLogin(req, res) {
     const { email, password } = req.body;
     const isEmailRegistered = await isEmailUnique(email);
     const userData = await searchDataByEmail(email);
@@ -45,15 +46,15 @@ async function userLogin(req, res) {
         const token = jwt.sign({ email: userData.email, _id: userData.ID }, process.env.SECRETKEY, { expiresIn: "1h" });
         return res.status(200).send({ 
             data: token, 
-            message: "User was successfully logged in" 
+            message: "Doctor was successfully logged in" 
         });
     } catch (error) {
         res.status(500).send({
-            message: 'internal server error'
+            message: 'internal server error' + error.message,
         })
     }
 }
 
 module.exports = { 
-    userLogin, 
+    docLogin, 
 };
