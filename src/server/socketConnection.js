@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const { saveMessageToDatabase } = require('../db/storeData');
 
-async function handleSocketConnection(io, socket) {
+async function socketConnectionHandler(io, socket) {
     socket.on('joinConversation', ({ userID, doctorID, sender}) => {
         const conversationID = `${userID}_${doctorID}`;
         socket.join(conversationID);
@@ -25,4 +25,4 @@ async function handleSocketConnection(io, socket) {
     });
 }
 
-module.exports = handleSocketConnection;
+module.exports = socketConnectionHandler;

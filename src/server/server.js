@@ -6,15 +6,20 @@ const bodyParser = require('body-parser');
 const router = require('./route');
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
-const handleSocketConnection = require('./socketConnection');
+const io =  socketIo(server, {
+      cors: {
+        methods: ["GET", "POST", "PUT", "DELETE"]
+      }
+    });
+
+const socketConnectionHandler = require('./socketConnection');
 require('dotenv').config();
 
-
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(router);
 
-io.on('connection', (socket) => handleSocketConnection(io, socket));
+io.on('connection', (socket) => socketConnectionHandler(io, socket));
 
 const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => {
