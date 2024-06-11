@@ -1,8 +1,8 @@
 const Joi = require('joi');
 
 function isUsernameTooShort(username) {
-    // Check if username is at least 5 characters long
-    if (username.length < 4) {
+    // Check if username is at least 3 characters long
+    if (username.length < 2) {
         return true;
     } else {
         return false;

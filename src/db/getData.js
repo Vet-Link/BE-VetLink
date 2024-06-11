@@ -1,29 +1,5 @@
 const db = require("./initializeDB");
 
-async function isUsernameUnique(username) {
-  const loginInfoCollection = db.collection('login-info');
-
-  try {
-    // Query for documents with the given username
-    const snapshot = await loginInfoCollection.where('username', '==', username).get();
-
-    snapshot.forEach(doc => {
-      //console.log(doc.id, '=>', doc.data());
-    });
-
-    //if unique
-    if (snapshot.empty) {
-      return true;
-    } 
-
-    //if duplicated
-    return false;
-  } catch (error) {
-    console.error('Error checking username uniqueness:', error);
-    throw error;
-  }
-}
-
 async function isEmailUnique(email) {
   const loginInfoCollection = db.collection('login-info');
 
@@ -120,7 +96,6 @@ async function getLatestVerificationCodeByEmail(email) {
 }
 
 module.exports = {
-  isUsernameUnique,
   isEmailUnique,
   searchDataByEmail,
   getLatestUserDataByEmail,

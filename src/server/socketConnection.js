@@ -2,25 +2,22 @@ const crypto = require('crypto');
 const { saveMessageToDatabase } = require('../db/storeData');
 
 async function handleSocketConnection(io, socket) {
-    console.log('User connected');
-
-    socket.on('joinConversation', ({ userID, doctorID }) => {
+    socket.on('joinConversation', ({ userID, doctorID, sender}) => {
         const conversationID = `${userID}_${doctorID}`;
         socket.join(conversationID);
+        const message = `${sender} has connected`;
+        const msgData = { sender, message }
+        io.to(conversationID).emit('chat-message', msgData);
     });
 
-    // Event handler untuk pengiriman pesan
     socket.on('sendMessage', async (data) => {
-        const { userID, doctorID, sender, message } = data;
-        const conversationID = `${userID}_${doctorID}`;
-        console.log(conversationID);
+        const { conversationID, sender, message } = data;
+        const msgData = { sender, message }
         const messageId = crypto.randomUUID();
 
-        // Simpan pesan ke Firestore (atau database lainnya)
         await saveMessageToDatabase(conversationID, messageId, data);
         
-        // Kirim pesan ke room percakapan yang sesuai
-        io.to(conversationID).emit('message', data);
+        io.to(conversationID).emit('chat-message', msgData);
     });
 
     socket.on('disconnect', () => {

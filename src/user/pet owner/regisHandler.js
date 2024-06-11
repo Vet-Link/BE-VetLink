@@ -4,7 +4,7 @@ const validator = require('validator');
 
 const { storeDataRegis } = require("../../db/storeData");
 const getGMT7Date = require("../../service/getGMT7Date");
-const { isUsernameUnique, isEmailUnique } = require("../../db/getData");
+const { isEmailUnique } = require("../../db/getData");
 const { isUsernameTooShort, isUsernameTooLong, isUsernameHasSymbol, validatePassword } = require("../../service/characterChecker");
 const sendVerificationEmail = require('../../verification/sendVerification');
 
@@ -12,7 +12,6 @@ async function userRegistration(req, res) {
     const { username, email, password, passwordVerify } = req.body;
     const time = getGMT7Date();
     const ID = crypto.randomUUID();
-    const isUsernameUniqueCheck = await isUsernameUnique(username);
     const isEmailUniqueCheck = await isEmailUnique(email);
 
     try {
@@ -24,9 +23,6 @@ async function userRegistration(req, res) {
 
         //check if the username has symbol
         if(isUsernameHasSymbol(username)) {return res.status(400).json({status: 'fail',message: 'Usernames must not contain symbols',});}
-
-        //Ensure there are no duplicated username in db
-        if(!isUsernameUniqueCheck) {return res.status(400).json({status: 'fail',message: 'Username already exists',});}
 
         //Email format validation
         if (!validator.isEmail(email)) {return res.status(400).send({status: 'error',message: 'Email is not valid. Please try again!',});}

@@ -1,5 +1,4 @@
 node_modules
-client
 service-key-firestore.json
 test.js
 Dockerfile
