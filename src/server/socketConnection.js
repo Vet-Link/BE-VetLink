@@ -15,7 +15,7 @@ async function socketConnectionHandler(io, socket) {
         const msgData = { sender, message }
         const messageId = crypto.randomUUID();
 
-        await saveMessageToDatabase(conversationID, messageId, data);
+        await saveMessageToDatabase(conversationID, messageId, msgData);
         
         io.to(conversationID).emit('chat-message', msgData);
     });

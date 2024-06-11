@@ -1,6 +1,5 @@
 node_modules
 service-key-firestore.json
 test.js
-Dockerfile
 deploy.sh
 .env
