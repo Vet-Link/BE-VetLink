@@ -3,3 +3,4 @@ service-key-firestore.json
 test.js
 Dockerfile
 deploy.sh
+mykey.json
