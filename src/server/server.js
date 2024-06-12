@@ -21,7 +21,7 @@ app.use(router);
 
 io.on('connection', (socket) => socketConnectionHandler(io, socket));
 
-const PORT = process.env.PORT || 8000;
+const PORT = 8080;
 server.listen(PORT, () => {
     console.log("Server is up and listening on " + "http://localhost:" + PORT);
 });

@@ -1,4 +1,3 @@
-const crypto = require('crypto');
 const validator = require('validator');
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -8,6 +7,8 @@ const db = require('../db/initializeDB');
 const sendEmail = require('../service/sendEmail');
 const resetPwMessage = require('./emailMessage');
 const { validatePassword } = require('../service/characterChecker');
+const { saveVerificationCode } = require('../db/storeData');
+const isTokenExpired = require('../service/jwtToken');
 
 async function userResetPasswordReq(req, res) {
     const { email } = req.body;
@@ -27,13 +28,14 @@ async function userResetPasswordReq(req, res) {
         }
 
         // Generate JWT Token
-        const token = jwt.sign({ email: email, _id: ID }, process.env.SECRETKEY, { expiresIn: "3m" });
+        const token = jwt.sign({ email: email }, process.env.SECRETKEY, { expiresIn: "3m" });
 
         // Generate random 6 digit code
         const verificationCode = generateRandomCode();
         const saltRounds = parseInt(process.env.SALT, 10);
         const hashedVerificationCode = await bcrypt.hash(verificationCode, saltRounds);
-        await db.collection('forgot-password').doc(email).set({ createdAt, email, hashedVerificationCode, token});
+        const data = { createdAt, email, hashedVerificationCode, token };
+        await saveVerificationCode(email, data);
 
         // Compose Email Message
         const subject = "VetLink Verification code for your password reset";

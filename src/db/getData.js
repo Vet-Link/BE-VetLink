@@ -71,7 +71,7 @@ async function getLatestUserDataByEmail(email) {
 }
 
 async function getLatestVerificationCodeByEmail(email) {
-  const Collection = db.collection('forgot-Password');
+  const Collection = db.collection('forgot-password');
 
   try {
     const snapshot = await Collection

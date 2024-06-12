@@ -17,8 +17,14 @@ async function saveMessageToDatabase(conversationID, messageId, data) {
   await petCollection.doc(messageId).set(data);
 }
 
+async function saveVerificationCode(email, data) {
+  const Collection = db.collection('forgot-password');
+  await Collection.doc(email).set(data);
+}
+
 module.exports = {
     storeDataRegis,
     storeDataPet,
     saveMessageToDatabase,
+    saveVerificationCode,
 }
