@@ -4,7 +4,7 @@ const sendEmail = require('../service/sendEmail');
 const db = require('../db/initializeDB');
 const verificationMessage = require('./emailMessage');
 
-async function sendVerificationEmail(email, username, ID) {
+async function sendVerificationEmail(userType, email, username, ID) {
     try {
         // Generate JWT Token
         const token = jwt.sign({ email: email, _id: ID }, process.env.SECRETKEY, { expiresIn: "3m" });
@@ -14,7 +14,7 @@ async function sendVerificationEmail(email, username, ID) {
         await db.collection('verificationTokens').doc(ID).set({ createdAt, ID, token});
 
         // Construct Verification URL
-        const url = `https://be-vetlink-dot-vetlink-425416.et.r.appspot.com/${ID}/verify/${token}`;
+        const url = `https://be-vetlink-dot-vetlink-425416.et.r.appspot.com/${userType}/${ID}/verify/${token}`;
         
         // Compose Email Message
         const subject = "Please Verify Your Email From VetLink";

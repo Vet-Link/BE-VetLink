@@ -48,7 +48,7 @@ async function userRegistration(req, res) {
         }
 
         //send email verification
-        const emailResult = await sendVerificationEmail(email, username, ID);
+        const emailResult = await sendVerificationEmail('user', email, username, ID);
 
         if(!emailResult.success) {return res.status(500).json({status: 'fail',message: 'Data failed to be registered. ' + emailResult.message,});}
 
