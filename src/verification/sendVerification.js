@@ -14,7 +14,7 @@ async function sendVerificationEmail(userType, email, username, ID) {
         await db.collection('verificationTokens').doc(ID).set({ createdAt, ID, token});
 
         // Construct Verification URL
-        const url = `https://be-vetlink-dot-vetlink-425416.et.r.appspot.com/${userType}/${ID}/verify/${token}`;
+        const url = `http://localhost:8080/verify/${userType}/${ID}/${token}`;
         
         // Compose Email Message
         const subject = "Please Verify Your Email From VetLink";

@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
 //Registration route
 router.post('/loginUser', userLogin)
 router.post('/regisUser', userRegistration);
-router.get('/:userType/:id/verify/:token', emailLinkVerificator);
+router.get('/verify/:userType/:id/:token', emailLinkVerificator);
 
 //Forgot password Route
 router.post('/forgotPassword', userResetPasswordReq);
