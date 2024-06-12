@@ -7,14 +7,14 @@ const verificationMessage = require('./emailMessage');
 async function sendVerificationEmail(email, username, ID) {
     try {
         // Generate JWT Token
-        const token = jwt.sign({ email: email, _id: ID }, process.env.SECRETKEY, { expiresIn: "1h" });
+        const token = jwt.sign({ email: email, _id: ID }, process.env.SECRETKEY, { expiresIn: "3m" });
         
         // Save token to Firestore
         const createdAt = Firestore.FieldValue.serverTimestamp();
         await db.collection('verificationTokens').doc(ID).set({ createdAt, ID, token});
 
         // Construct Verification URL
-        const url = `http://localhost:8000/${ID}/verify/${token}`;
+        const url = `https://be-vetlink-dot-vetlink-425416.et.r.appspot.com/${ID}/verify/${token}`;
         
         // Compose Email Message
         const subject = "Please Verify Your Email From VetLink";
