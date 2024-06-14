@@ -6,6 +6,6 @@ const db = new Firestore({
   databaseId: 'patient-db',
 });
 
-const bucket = storage.bucket('your-firebase-storage-bucket-name');
+//const bucket = storage.bucket("vetlink");
 
-module.exports = { db, bucket };
+module.exports =  db ;

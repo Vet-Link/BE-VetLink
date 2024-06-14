@@ -1,44 +1,46 @@
-const { db } = require('./initializeDB');
-
-
-// Function to determine the collection based on user type
-// function getCollection(userType) {
-//   if (userType === 2) {
-//     return db.collection('doctor-data');
-//   } else if (userType === 3) {
-//     return db.collection('login-info');
-//   } else {
-//     throw new Error('Invalid user type');
-//   }
-// }
+const db = require('./initializeDB');
 
 // Check if username is unique
 // async function isUsernameUnique(username) {
-//   const Collection = db.collection('login-info');
+//   if (!username) {
+//     throw new Error("Username is undefined or null");
+//   }
+//   const Collection = db.collection('doctor-data');
 //   try {
 //     const snapshot = await Collection.where('username', '==', username).get();
 //     return snapshot.empty;
 //   } catch (error) {
-//     console.error(`Error checking username uniqueness for ${'login-info'}:`, error);
+//     console.error(`Error checking username uniqueness for 'doctor-data':`, error);
 //     throw error;
 //   }
 // }
 
 // Check if email is unique
 async function isEmailUnique(email) {
-  const Collection = db.collection('login-info');
+  if (!email) {
+    throw new Error("Email is undefined or null");
+  }
+  const Collection = db.collection('doctor-data');
   try {
     const snapshot = await Collection.where('email', '==', email).get();
-    return snapshot.empty;
+    if (snapshot.empty)
+      {
+        return true;
+      }
+    return false;
+    
   } catch (error) {
-    console.error(`Error checking email uniqueness for ${'login-info'}:`, error);
+    console.error(`Error checking email uniqueness for 'doctor-data':`, error);
     throw error;
   }
 }
 
 // Search data by email
 async function searchDataByEmail(email) {
-  const Collection = db.collection('login-info');
+  if (!email) {
+    throw new Error("Email is undefined or null");
+  }
+  const Collection = db.collection('doctor-data');
   try {
     const snapshot = await Collection.where('email', '==', email).get();
     if (snapshot.empty) {
@@ -50,12 +52,10 @@ async function searchDataByEmail(email) {
     });
     return user;
   } catch (error) {
-    console.error(`Error finding data by email for ${'login-info'}:`, error);
+    console.error(`Error finding data by email for 'doctor-data':`, error);
     throw error;
   }
 }
-
-
 
 module.exports = {
   //isUsernameUnique,

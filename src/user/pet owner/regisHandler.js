@@ -12,7 +12,7 @@ async function userRegistration(req, res) {
     const { username, email, password, passwordVerify } = req.body;
     const time = getGMT7Date();
     const ID = crypto.randomUUID();
-    const isUsernameUniqueCheck = await isUsernameUnique(username);
+    //const isUsernameUniqueCheck = await isUsernameUnique(username);
     const isEmailUniqueCheck = await isEmailUnique(email);
 
     try {
@@ -41,12 +41,12 @@ async function userRegistration(req, res) {
         }
 
         //Ensure there are no duplicated username in db
-        if(!isUsernameUniqueCheck) {
-            return res.status(400).json({
-                status: 'fail',
-                message: 'Username already exists',
-            });
-        }
+        // if(!isUsernameUniqueCheck) {
+        //     return res.status(400).json({
+        //         status: 'fail',
+        //         message: 'Username already exists',
+        //     });
+        // }
 
         //Email format validation
         if (!validator.isEmail(email)) {
