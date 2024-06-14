@@ -1,12 +1,14 @@
 const express = require('express');
 const { userRegistration } = require('../user/pet owner/regisHandler');
 const { userLogin } = require('../user/pet owner/loginHandler');
-const { docRegistration, photo } = require('../user/doctor/docRegistHandler');
+const { docRegistration } = require('../user/doctor/docRegistHandler');
 const { docLogin } = require('../user/doctor/docLoginHandler');
 const emailLinkVerificator = require('../verification/verifiedFromEmailLink');
 const { userResetPasswordReq, userResetPasswordVerification, userResetPasswordInput } = require('../password reset/resetPasswordHandler');
 const router = express.Router();
 
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
 // Define the routes
 router.get('/', (req, res) => {
     console.log("Backend service running normally");
@@ -17,7 +19,7 @@ router.get('/', (req, res) => {
 router.post('/loginUser', userLogin);
 router.post('/regisUser', userRegistration);
 router.post('/docLoginUser', docLogin);
-router.post('/docRegisUser', docRegistration);
+router.post('/docRegisUser', upload.single('imgfile'), docRegistration);
 router.get('/:id/verify/:token', emailLinkVerificator);
 
 // Forgot password routes
