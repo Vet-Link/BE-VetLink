@@ -1,4 +1,4 @@
-const { isEmailUnique, searchDataByEmail } = require("../../db/getData");
+const { isEmailUnique, searchDataByEmail } = require("../../db/getDataDoc");
 const bcrypt = require("bcrypt");
 const validator = require('validator');
 const jwt = require("jsonwebtoken");

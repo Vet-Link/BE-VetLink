@@ -1,36 +1,54 @@
-// Client side unique ID - This could and probably should move to server with UUID
-function uuidv4() {
-    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
-      (
-        c ^
-        (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
-      ).toString(16)
-    );
-  }
-  
-  document.getElementById("submitBtn").addEventListener("click", () => {
-    let postid = uuidv4();
+const { ID } = require('../user/doctor/docRegistHandler');
+
+document.addEventListener('DOMContentLoaded', () => {
+  const username = document.getElementById("username");
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+  const passwordVerify = document.getElementById("passwordVerify");
+  const messageForm = document.getElementById('send-container');
+
+  messageForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // Prevent the default form submission
+    let postid = ID;
     let inputElem = document.getElementById("imgfile");
     let file = inputElem.files[0];
+    if (!file) {
+      alert("Please select a file.");
+      return;
+    }
+
     // Create new file so we can rename the file
     let blob = file.slice(0, file.size, "image/jpeg");
-    newFile = new File([blob], `${postid}_post.jpeg`, { type: "image/jpeg" });
-    // Build the form data - You can add other input values to this i.e descriptions, make sure img is appended last
+    let newFile = new File([blob], `${postid}_post.jpeg`, { type: "image/jpeg" });
+
+    // Build the form data
     let formData = new FormData();
+    formData.append("username", username.value);
+    formData.append("email", email.value);
+    formData.append("password", password.value);
+    formData.append("passwordVerify", passwordVerify.value);
     formData.append("imgfile", newFile);
-    fetch("/upload", {
+
+    fetch("http://localhost:8080/upload", {
       method: "POST",
       body: formData,
     })
-      .then((res) => res.text())
-      .then(loadPosts());
+    .then((res) => res.text())
+    .then((res) => {
+      console.log(res);
+      loadPosts(); // Load posts after successful upload
+    })
+    .catch((error) => console.error("Error:", error));
   });
+
   // Loads the posts on page load
   function loadPosts() {
-    fetch("/upload")
+    fetch("http://localhost:8080/upload")
       .then((res) => res.json())
       .then((x) => {
-        for (y = 0; y < x[0].length; y++) {
+        const imagesContainer = document.getElementById("images");
+        imagesContainer.innerHTML = ''; // Clear the existing images
+        for (let y = 0; y < x[0].length; y++) {
           console.log(x[0][y]);
           const newimg = document.createElement("img");
           newimg.setAttribute(
@@ -39,8 +57,12 @@ function uuidv4() {
           );
           newimg.setAttribute("width", 50);
           newimg.setAttribute("height", 50);
-          document.getElementById("images").appendChild(newimg);
+          imagesContainer.appendChild(newimg);
         }
-      });
+      })
+      .catch((error) => console.error("Error:", error));
   }
-  
+
+  // Call loadPosts when the page loads
+  loadPosts();
+});
