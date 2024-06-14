@@ -1,8 +1,9 @@
 node_modules
 service-key-firestore.json
-test.js
-Dockerfile
-deploy.sh
-mykey.json
-keyfile.json
 storage-admin-key-vetlink.json
+Dockerfile
+keyfile.json
+deploy.sh
+.env
+
+
