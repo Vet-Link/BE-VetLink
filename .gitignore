@@ -5,5 +5,5 @@ Dockerfile
 keyfile.json
 deploy.sh
 .env
-
+credentials.json
 
