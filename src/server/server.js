@@ -24,6 +24,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(router);
+app.use(fileUpload());
 
 io.on('connection', (socket) => socketConnectionHandler(io, socket));
 

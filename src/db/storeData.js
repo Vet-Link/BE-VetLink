@@ -22,9 +22,22 @@ async function saveVerificationCode(email, data) {
   await Collection.doc(email).set(data);
 }
 
+async function storeDataDoctor(ID, doctorData) { 
+  const Collection = db.collection('doctor-data');
+  await Collection.doc(ID).set(doctorData);
+}
+
+async function storeVerificationTokens(ID, data){
+  const Collection = db.collection('verificationTokens');
+  await Collection.doc(ID).set(data);
+
+}
+
 module.exports = {
     storeDataRegis,
     storeDataPet,
+    storeDataDoctor,
+    storeVerificationTokens,
     saveMessageToDatabase,
     saveVerificationCode,
 }

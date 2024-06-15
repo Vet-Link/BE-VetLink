@@ -1,45 +1,56 @@
 const db = require("./initializeDB");
 
 async function isEmailUnique(email) {
-  const loginInfoCollection = db.collection('login-info');
-
+  const Collection = db.collection('login-info');
   try {
-    // Query for documents with the given email
-    const snapshot = await loginInfoCollection.where('email', '==', email).get();
-
-    //if unique
-    if (snapshot.empty) {
-      return true;
-    } 
-
-    //if duplicated
-    return false;
+    const snapshot = await Collection.where('email', '==', email).get();
+    return snapshot.empty;
   } catch (error) {
-    console.error('Error checking email uniqueness:', error);
+    console.error(`Error checking email uniqueness for ${'login-info'}:`, error);
     throw error;
   }
 }
 
+// Search data by email
 async function searchDataByEmail(email) {
-  const loginInfoCollection = db.collection('login-info');
-
+  const Collection = db.collection('login-info');
   try {
-    const snapshot = await loginInfoCollection.where('email', '==', email).get();
-
-    //if there is no email found
+    const snapshot = await Collection.where('email', '==', email).get();
     if (snapshot.empty) {
-      const msg = "User not found";
-      return msg;
+      return "User not found";
     }
-
     let user;
     snapshot.forEach(doc => {
       user = doc.data();
     });
-
     return user;
   } catch (error) {
-    console.error('Error finding data by email:', error);
+    console.error(`Error finding data by email for ${'login-info'}:`, error);
+    throw error;
+  }
+}
+
+async function getLatestVerificationCodeByEmail(email) {
+  const Collection = db.collection('forgot-password');
+
+  try {
+    const snapshot = await Collection
+    .where('email', '==', email)
+    .get()
+
+  if (snapshot.empty) {
+    const msg = "No request for password reset for current email";
+    return msg;
+  }
+
+  let latestData;
+  snapshot.forEach(doc => {
+    latestData = doc.data();
+  });
+
+  return latestData;
+  } catch (error) {
+    console.error('Error finding request for password reset for current email:', error);
     throw error;
   }
 }
@@ -66,31 +77,6 @@ async function getLatestUserDataByEmail(email) {
 
   } catch (error) {
     console.error('Error getting latest data for current email:', error);
-    throw error;
-  }
-}
-
-async function getLatestVerificationCodeByEmail(email) {
-  const Collection = db.collection('forgot-password');
-
-  try {
-    const snapshot = await Collection
-    .where('email', '==', email)
-    .get()
-
-  if (snapshot.empty) {
-    const msg = "No request for password reset for current email";
-    return msg;
-  }
-
-  let latestData;
-  snapshot.forEach(doc => {
-    latestData = doc.data();
-  });
-
-  return latestData;
-  } catch (error) {
-    console.error('Error finding request for password reset for current email:', error);
     throw error;
   }
 }
