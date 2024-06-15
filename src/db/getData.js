@@ -95,9 +95,35 @@ async function getLatestVerificationCodeByEmail(email) {
   }
 }
 
+async function getAllPetById(ID) {
+  const path = `login-info/${ID}/pet-data`;
+  const petCollection = db.collection(path);
+
+  try{
+    const snapshot = await petCollection.get();
+
+    if (snapshot.empty) {
+      return [];
+    }
+
+    const data = [];
+    snapshot.forEach(doc => {
+      data.push({
+        ...doc.data()
+      });
+    });
+
+    return data;
+  } catch (error) {
+    console.error('Error finding pet data: ', error);
+    throw error;
+  }
+}
+
 module.exports = {
   isEmailUnique,
   searchDataByEmail,
   getLatestUserDataByEmail,
   getLatestVerificationCodeByEmail,
+  getAllPetById,
 }

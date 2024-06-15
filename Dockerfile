@@ -1,5 +1,7 @@
 FROM node:20
 
+workdir /src
+
 COPY package*.json ./
 
 RUN npm install
@@ -11,5 +13,7 @@ ENV SECRETKEY=awooogaaa
 ENV HOST=ardyprasyah2653@gmail.com
 ENV PASS=hqifquhyaounusmt
 ENV SALT=10
+
+EXPOSE 8080
 
 CMD ["npm", "start"]
