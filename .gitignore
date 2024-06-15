@@ -6,4 +6,5 @@ keyfile.json
 deploy.sh
 .env
 credentials.json
-
+service-key-bucket.json
+test.js

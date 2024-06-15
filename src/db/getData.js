@@ -1,30 +1,5 @@
-const { db } = require('./initializeDB');
+const db = require("./initializeDB");
 
-
-// Function to determine the collection based on user type
-// function getCollection(userType) {
-//   if (userType === 2) {
-//     return db.collection('doctor-data');
-//   } else if (userType === 3) {
-//     return db.collection('login-info');
-//   } else {
-//     throw new Error('Invalid user type');
-//   }
-// }
-
-// Check if username is unique
-// async function isUsernameUnique(username) {
-//   const Collection = db.collection('login-info');
-//   try {
-//     const snapshot = await Collection.where('username', '==', username).get();
-//     return snapshot.empty;
-//   } catch (error) {
-//     console.error(`Error checking username uniqueness for ${'login-info'}:`, error);
-//     throw error;
-//   }
-// }
-
-// Check if email is unique
 async function isEmailUnique(email) {
   const Collection = db.collection('login-info');
   try {
@@ -55,10 +30,86 @@ async function searchDataByEmail(email) {
   }
 }
 
+async function getLatestVerificationCodeByEmail(email) {
+  const Collection = db.collection('forgot-password');
 
+  try {
+    const snapshot = await Collection
+    .where('email', '==', email)
+    .get()
+
+  if (snapshot.empty) {
+    const msg = "No request for password reset for current email";
+    return msg;
+  }
+
+  let latestData;
+  snapshot.forEach(doc => {
+    latestData = doc.data();
+  });
+
+  return latestData;
+  } catch (error) {
+    console.error('Error finding request for password reset for current email:', error);
+    throw error;
+  }
+}
+
+async function getLatestUserDataByEmail(email) {
+  const Collection = db.collection('login-info');
+
+  try {
+    const snapshot = await Collection
+    .where('email', '==', email)
+    .get()
+
+  if (snapshot.empty) {
+    const msg = "No email found";
+    return msg;
+  }
+
+  let latestData;
+  snapshot.forEach(doc => {
+    latestData = doc.data();
+  });
+
+  return latestData;
+
+  } catch (error) {
+    console.error('Error getting latest data for current email:', error);
+    throw error;
+  }
+}
+
+async function getAllPetById(ID) {
+  const path = `login-info/${ID}/pet-data`;
+  const petCollection = db.collection(path);
+
+  try{
+    const snapshot = await petCollection.get();
+
+    if (snapshot.empty) {
+      return [];
+    }
+
+    const data = [];
+    snapshot.forEach(doc => {
+      data.push({
+        ...doc.data()
+      });
+    });
+
+    return data;
+  } catch (error) {
+    console.error('Error finding pet data: ', error);
+    throw error;
+  }
+}
 
 module.exports = {
-  //isUsernameUnique,
   isEmailUnique,
   searchDataByEmail,
+  getLatestUserDataByEmail,
+  getLatestVerificationCodeByEmail,
+  getAllPetById,
 }

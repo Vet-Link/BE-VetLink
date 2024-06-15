@@ -1,23 +1,34 @@
 const express = require('express');
+const http = require('http');
+const cors = require('cors')
+const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
-const cookieParser = require("cookie-parser");
+
 const router = require('./route');
 const app = express();
-const fileUpload = require('express-fileupload');
+const server = http.createServer(app);
+const io =  socketIo(server, {
+      cors: {
+        methods: ["GET", "POST", "PUT", "DELETE"]
+      }
+    });
+
+const socketConnectionHandler = require('./socketConnection');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
-
-app.use(bodyParser.json());
-app.use(express.urlencoded ({ extended: true }));
+app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-//const registrationRoute = require('../user/doctor/docRegistHandler');
-//const uploadRoute = require('./upload');
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(router);
 app.use(fileUpload());
 
-const PORT = process.env.PORT || 9000; // Change port to 9000
-app.listen(PORT, () => {
+io.on('connection', (socket) => socketConnectionHandler(io, socket));
+
+const PORT = 8080;
+server.listen(PORT, () => {
     console.log("Server is up and listening on " + "http://localhost:" + PORT);
 });

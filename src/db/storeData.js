@@ -1,4 +1,3 @@
-//const { func } = require("joi");
 const db = require("./initializeDB");
 
 async function storeDataRegis(ID, userDataRegis) {
@@ -7,8 +6,20 @@ async function storeDataRegis(ID, userDataRegis) {
 }
 
 async function storeDataPet(ID, petData) { 
-  const Collection = db.collection('pet-data');
-  await Collection.doc(ID).set(petData);
+  const collectionPath = `login-info/${ID}/pet-data`;
+  const petCollection = db.collection(collectionPath);
+  await petCollection.doc(petData.petId).set(petData);
+}
+
+async function saveMessageToDatabase(conversationID, messageId, data) {
+  const collectionPath = `messages/${conversationID}/message-data`;
+  const petCollection = db.collection(collectionPath);
+  await petCollection.doc(messageId).set(data);
+}
+
+async function saveVerificationCode(email, data) {
+  const Collection = db.collection('forgot-password');
+  await Collection.doc(email).set(data);
 }
 
 async function storeDataDoctor(ID, doctorData) { 
@@ -22,22 +33,11 @@ async function storeVerificationTokens(ID, data){
 
 }
 
-// async function main(){
-//   const ID = "Test";
-//   const A = "terse";
-//   const B = "rah";
-//   await storeDataDoctor(ID,{A,B});
-//   await storeVerificationTokens(ID, {A,B});
-// }
-
-// main();
-
-
-
-
 module.exports = {
     storeDataRegis,
     storeDataPet,
     storeDataDoctor,
-    storeVerificationTokens
+    storeVerificationTokens,
+    saveMessageToDatabase,
+    saveVerificationCode,
 }

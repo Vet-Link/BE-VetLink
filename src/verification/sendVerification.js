@@ -5,10 +5,10 @@ const sendEmail = require('../service/sendEmail');
 const verificationMessage = require('./emailMessage');
 const {storeVerificationTokens} = require('../db/storeData')
 
-async function sendVerificationEmail(email, username, ID) {
+async function sendVerificationEmail(userType, email, username, ID) {
     try {
         // Generate JWT Token
-        const token = jwt.sign({ email: email, _id: ID }, process.env.SECRETKEY, { expiresIn: "1h" });
+        const token = jwt.sign({ email: email, _id: ID }, process.env.SECRETKEY, { expiresIn: "3m" });
         
         // Save token to Firestore
         const createdAt = Firestore.FieldValue.serverTimestamp();
@@ -19,7 +19,7 @@ async function sendVerificationEmail(email, username, ID) {
         //db.collection('verificationTokens').doc(ID).set({ createdAt, ID, token});
 
         // Construct Verification URL
-        const url = `http://localhost:9000/${ID}/verify/${token}`;
+        const url = `http://localhost:8080/verify/${userType}/${ID}/${token}`;
         
         // Compose Email Message
         const subject = "Please Verify Your Email From VetLink";
@@ -37,6 +37,5 @@ async function sendVerificationEmail(email, username, ID) {
         
     } 
 }
-
 
 module.exports = sendVerificationEmail;

@@ -1,0 +1,8 @@
+runtime: nodejs22
+service: be-vetlink
+
+env_variables:
+  SECRETKEY: "awoooga"
+  HOST: "ardyprasyah2653@gmail.com"
+  PASS: "hqifquhyaounusmt"
+  SALT: "10"
