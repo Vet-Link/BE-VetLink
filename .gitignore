@@ -1,5 +1,6 @@
 node_modules
 service-key-firestore.json
+service-key-bucket.json
 test.js
 deploy.sh
 .env

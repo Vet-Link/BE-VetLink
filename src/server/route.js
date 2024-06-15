@@ -1,9 +1,19 @@
 const express = require('express');
+const Multer = require("multer");
 const { userRegistration } = require('../user/pet owner/regisHandler');
 const { userLogin } = require('../user/pet owner/loginHandler');
 const emailLinkVerificator = require('../verification/verifiedFromEmailLink');
 const { userResetPasswordReq, userResetPasswordVerification, userResetPasswordInput } = require('../password reset/resetPasswordHandler');
+const { userUpdateProfile, userLoadBiodata } = require('../user/pet owner/userBiodata');
+const { userAddPetData, loadPetProfile } = require('../user/pet owner/pet/petData');
 const router = express.Router();
+
+const multer = Multer({
+    storage: Multer.memoryStorage(),
+    limits: {
+      fileSize: 3 * 1024 * 1024,
+    },
+  });
 
 // Define the routes
 router.get('/', (req, res) => {
@@ -11,14 +21,23 @@ router.get('/', (req, res) => {
     res.send("Backend service running normally");
 });
 
-//Registration route
-router.post('/loginUser', userLogin)
+// User registration route
+router.post('/loginUser', userLogin);
 router.post('/regisUser', userRegistration);
 router.get('/verify/:userType/:id/:token', emailLinkVerificator);
+
+// User profile
+router.get('/userProfile', userLoadBiodata);
+router.put('/userUpdate', multer.single('imgfile'), userUpdateProfile);
 
 //Forgot password Route
 router.post('/forgotPassword', userResetPasswordReq);
 router.post('/forgotPassword/verification', userResetPasswordVerification);
-router.post('/forgotPassword/verification/input', userResetPasswordInput);
+router.put('/forgotPassword/verification/input', userResetPasswordInput);
+
+// Pet route
+router.post('/addPet', userAddPetData);
+router.get('/showPet', loadPetProfile);
+
 
 module.exports = router;
