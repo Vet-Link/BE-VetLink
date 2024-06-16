@@ -1,8 +1,9 @@
 const { Firestore } = require('@google-cloud/firestore');
 const jwt = require("jsonwebtoken");
 const sendEmail = require('../service/sendEmail');
-const db = require('../db/initializeDB');
+//const db = require('../db/initializeDB');
 const verificationMessage = require('./emailMessage');
+const {storeVerificationTokens} = require('../db/storeData')
 
 async function sendVerificationEmail(userType, email, username, ID) {
     try {
@@ -11,7 +12,11 @@ async function sendVerificationEmail(userType, email, username, ID) {
         
         // Save token to Firestore
         const createdAt = Firestore.FieldValue.serverTimestamp();
-        await db.collection('verificationTokens').doc(ID).set({ createdAt, ID, token});
+        const data = { createdAt, ID, token };
+
+
+        await storeVerificationTokens(ID, data);
+        //db.collection('verificationTokens').doc(ID).set({ createdAt, ID, token});
 
         // Construct Verification URL
         const url = `http://localhost:8080/verify/${userType}/${ID}/${token}`;
@@ -27,8 +32,10 @@ async function sendVerificationEmail(userType, email, username, ID) {
         return { success: true, message: "An email has been sent to your account. Please check your inbox." };
     } catch (error) {
         console.error("Error sending verification email:", error);
+        //throw error;
         return { success: false, message: "Failed to send verification email." };
-    }
+        
+    } 
 }
 
 module.exports = sendVerificationEmail;
