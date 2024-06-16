@@ -1,5 +1,4 @@
 const nodemailer = require("nodemailer");
-const { getMaxListeners } = require("nodemailer/lib/xoauth2");
 
 async function sendEmail(email,subject,message) {
   try {

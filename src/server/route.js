@@ -1,5 +1,7 @@
 const express = require('express');
 const Multer = require("multer");
+const router = express.Router();
+
 const { userRegistration } = require('../user/pet owner/regisHandler');
 const { userLogin } = require('../user/pet owner/loginHandler');
 const { docRegistration } = require('../user/doctor/docRegistHandler');
@@ -8,7 +10,6 @@ const emailLinkVerificator = require('../verification/verifiedFromEmailLink');
 const { userResetPasswordReq, userResetPasswordVerification, userResetPasswordInput } = require('../password reset/resetPasswordHandler');
 const { userUpdateProfile, userLoadBiodata } = require('../user/pet owner/userBiodata');
 const { userAddPetData, loadPetProfile } = require('../user/pet owner/pet/petData');
-const router = express.Router();
 
 const multer = Multer({
     storage: Multer.memoryStorage(),
@@ -30,7 +31,7 @@ router.get('/verify/:userType/:id/:token', emailLinkVerificator);
 
 // Doctor registration and login routes
 router.post('/docLoginUser', docLogin);
-router.post('/docRegisUser', upload.single('imgfile'), docRegistration);
+router.post('/docRegisUser', multer.single('imgfile'), docRegistration);
 
 // User profile
 router.get('/userProfile', userLoadBiodata);
