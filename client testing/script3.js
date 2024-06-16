@@ -1,4 +1,4 @@
-const socket = io('http://localhost:8000')
+const socket = io('http://localhost:8000') // ganti ke link yang baru
 const messageContainer = document.getElementById('message-container')
 const messageForm = document.getElementById('send-container')
 const messageInput = document.getElementById('message-input')
@@ -6,9 +6,10 @@ const messageInput = document.getElementById('message-input')
 const userID = prompt('What is your userID?')
 const doctorID = prompt('what is your doctorID?')
 const conversationID = `${userID}_${doctorID}`
-const sender = doctorID;
+const sender = doctorID; // sender ini di set ke ID user / doctor tergantung tipe usernya, kalo login as user sender di set ke user, berlaku juga kalo dokter
 
-appendMessage('You joined')
+
+// ---------------------  fungsi utama chat  --------------------- \\
 socket.emit('joinConversation', {userID, doctorID, sender})
 
 socket.on('chat-message', msgData => {
@@ -31,7 +32,9 @@ messageForm.addEventListener('submit', e => {
   socket.emit('sendMessage', data)
   messageInput.value = ''
 })
+// ^^^^^^^^^^^^^^^^^^^^^  fungsi utama chat  ^^^^^^^^^^^^^^^^^^^^^ \\
 
+// fungsi buat frontend, sesuaikan aja sama kotlin kek gmn
 function appendMessage(message) {
   const messageElement = document.createElement('div')
   messageElement.innerText = message

@@ -28,7 +28,7 @@ router.get('/verify/:userType/:id/:token', emailLinkVerificator);
 
 // User profile
 router.get('/userProfile', userLoadBiodata);
-router.put('/userUpdate', multer.single('imgfile'), userUpdateProfile);
+router.put('/userProfile', multer.single('imgfile'), userUpdateProfile);
 
 //Forgot password Route
 router.post('/forgotPassword', userResetPasswordReq);

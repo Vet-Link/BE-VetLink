@@ -1,15 +1,10 @@
 const crypto = require('crypto');
 const { storeDataPet } = require("../../../db/storeData");
 const { getAllPetById } = require('../../../db/getData');
+const { isUsernameTooShort, isUsernameHasSymbol, isUsernameTooLong } = require('../../../service/characterChecker');
 
 async function userAddPetData (req, res) {
-    const {
-        ID,
-        pet_name,
-        pet_gender,
-        pet_age,
-        pet_species,
-        pet_weight } = req.body;
+    const { ID, pet_name, pet_gender, pet_age, pet_species, pet_weight } = req.body;
     const petId = crypto.randomUUID();
 
     const petData = {
@@ -22,12 +17,22 @@ async function userAddPetData (req, res) {
     };
 
     try {
+        //check if the username is too short
+        if(isUsernameTooShort(pet_name)) {return res.status(400).json({status: 'fail',message: 'Username is too short',});}
+
+        //check if the username is too long
+        if(isUsernameTooLong(pet_name)) {return res.status(400).json({status: 'fail',message: 'Username is too long',});}
+
+        //check if the username has symbol
+        if(isUsernameHasSymbol(pet_name)) {return res.status(400).json({status: 'fail',message: 'Usernames must not contain symbols',});}
+        
         //store pet data
         await storeDataPet(ID, petData);
 
         return res.status(200).json({status: 'success',message: 'Pet Data sucessfully registered.'});
     } catch (error) {
-        res.status(400).json({status: 'fail',message: 'Failed to receive data from the frontend', error: error.message});
+        console.error(error);
+        res.status(500).json({status: 'fail',message: 'Failed to save pet data'});
     }
 }
 

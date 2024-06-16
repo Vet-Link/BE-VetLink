@@ -8,10 +8,11 @@ async function userLoadBiodata(req, res) {
        const userData = await getLatestUserDataByEmail(email);
        const username = userData.username;
        const profileUrl = userData.profileURL;
+       const userEmail = userData.email;
 
        const userProfile = {
         username,
-        email,
+        userEmail,
         profileUrl
        }
 
@@ -78,8 +79,7 @@ async function userUpdateProfile(req, res) {
                     // Return response with updated or new username and photo URL
                     const response = {
                         status: 'success',
-                        message: 'Profile updated successfully.',
-                        updatedUsername: newUsername || undefined,
+                        message: 'Profile updated successfully',
                         photoUrl: publicUrl,
                     };
 
@@ -98,9 +98,8 @@ async function userUpdateProfile(req, res) {
 
             // Pipe the file buffer to the writable stream
             blobStream.end(req.file.buffer);
-        } else {
-            res.status(400).json({ status: 'fail', message: 'No file detected' });
         }
+        res.status(200).json({status: 'success', message: 'Username successfully updated'});
     } catch (error) {
         res.status(500).json({ status: 'fail', message: error.message });
     }
