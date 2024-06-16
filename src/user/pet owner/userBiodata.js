@@ -1,6 +1,5 @@
 const { getLatestUserDataByEmail } = require("../../db/getData");
-const bucket = require("../../db/initializeStorage");
-const { storeDataRegis } = require("../../db/storeData");
+const uploadToBucket = require("../../service/uploadToBucket");
 
 async function userLoadBiodata(req, res) {
    const { email } = req.body;
@@ -28,8 +27,8 @@ async function userLoadBiodata(req, res) {
 }
 
 async function userUpdateProfile(req, res) {
-    const { email, newUsername } = req.body;
-    //const { username, email, password, passwordVerify } = req.body;
+    //const { email, newUsername } = req.body;
+    const { email } = req.body;
 
     try {
         // Retrieve current user data
@@ -50,60 +49,31 @@ async function userUpdateProfile(req, res) {
             
             // Update username
             userData.username = newUsername;
-        } 
+        }
 
         // Handle photo profile upload
         if (req.file) {
-            console.log("File found, trying to upload...");
-            const fileName = `${userData.ID}.jpg`;
-            const blob = bucket.file(`User profile/${fileName}`);
-            const blobStream = blob.createWriteStream();
+            const fileName = `userProfile/${userData.ID}.jpg`;
+            const usecase = 'profile';
+            const userType = 'user';
+            const Data = userData;
 
-            // Handle successful upload
-            blobStream.on("finish", async () => {
-                try {
-                    // Make the file publicly accessible
-                    await blob.makePublic();
-
-                    // Add a cache-busting parameter to the URL
-                    const timestamp = new Date().getTime();
-                    const publicUrl = `https://storage.googleapis.com/vetlink/User%20profile/${fileName}?t=${timestamp}`;
-                    console.log(`File uploaded and publicly accessible at: ${publicUrl}`);
-
-                    // Add profile URL to userData
-                    userData.profileURL = publicUrl;
-                    
-                    // Save updated user data back to the database
-                    await storeDataRegis(userData.ID, userData);
-
-                    // Return response with updated or new username and photo URL
-                    const response = {
-                        status: 'success',
-                        message: 'Profile updated successfully',
-                        photoUrl: publicUrl,
-                    };
-
-                    res.status(200).json(response);
-                } catch (err) {
-                    console.error('Error making file public:', err);
-                    res.status(500).json({ status: 'fail', message: 'Error making file public.' });
-                } 
-            });
-
-            // Handle errors during the upload
-            blobStream.on('error', (err) => {
-                console.error('Error uploading file:', err);
-                res.status(500).json({ status: 'fail', message: 'Error uploading file.' });
-            });
-
-            // Pipe the file buffer to the writable stream
-            blobStream.end(req.file.buffer);
+            try {
+                const uploadStatus = await uploadToBucket(req.file, fileName, usecase, userType, Data);
+                return res.status(uploadStatus.statusCode).json(uploadStatus.response);
+            } catch (uploadError) {
+                console.error(uploadError);
+                return res.status(uploadError.statusCode || 500).json(uploadError.response || { status: 'fail', message: 'Error uploading file.' });
+            }
         }
-        res.status(200).json({status: 'success', message: 'Username successfully updated'});
+
+        res.status(200).json({ status: 'success', message: 'Username successfully updated' });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ status: 'fail', message: error.message });
     }
 }
+
 
 module.exports = {
     userLoadBiodata,
