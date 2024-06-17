@@ -106,10 +106,28 @@ async function getAllPetById(ID) {
   }
 }
 
+// check if pet name is unique to a user by ID
+async function isPetNameUnique(ID, petName) {
+  const path = `login-info/${ID}/pet-data`;
+  const petCollection = db.collection(path);
+
+  try{
+    const snapshot = await petCollection
+    .where('pet_name', '==', petName)
+    .get();
+
+    return snapshot.empty;
+  } catch (error) {
+    console.error(`Error checking pet name uniqueness for userID ${ID}: `, error);
+    throw error;
+  }
+}
+
 module.exports = {
   isEmailUnique,
   searchDataByEmail,
   getLatestUserDataByEmail,
   getLatestVerificationCodeByEmail,
   getAllPetById,
+  isPetNameUnique,
 }
