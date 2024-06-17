@@ -30,8 +30,8 @@ router.post('/regisUser', userRegistration);
 router.get('/verify/:userType/:id/:token', emailLinkVerificator);
 
 // Doctor registration and login routes
-router.post('/docLoginUser', docLogin);
 router.post('/docRegisUser', multer.single('imgfile'), docRegistration);
+router.post('/docLoginUser', docLogin);
 
 // User profile
 router.get('/userProfile', userLoadBiodata);

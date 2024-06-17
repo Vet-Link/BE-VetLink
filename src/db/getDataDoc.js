@@ -1,22 +1,7 @@
 const db = require('./initializeDB');
 
-// Check if username is unique
-// async function isUsernameUnique(username) {
-//   if (!username) {
-//     throw new Error("Username is undefined or null");
-//   }
-//   const Collection = db.collection('doctor-data');
-//   try {
-//     const snapshot = await Collection.where('username', '==', username).get();
-//     return snapshot.empty;
-//   } catch (error) {
-//     console.error(`Error checking username uniqueness for 'doctor-data':`, error);
-//     throw error;
-//   }
-// }
-
 // Check if email is unique
-async function isEmailUnique(email) {
+async function isDocEmailUnique(email) {
   if (!email) {
     throw new Error("Email is undefined or null");
   }
@@ -58,7 +43,6 @@ async function searchDataByEmail(email) {
 }
 
 module.exports = {
-  //isUsernameUnique,
-  isEmailUnique,
+  isDocEmailUnique,
   searchDataByEmail,
 }

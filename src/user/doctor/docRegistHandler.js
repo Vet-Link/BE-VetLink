@@ -2,9 +2,8 @@ const crypto = require('crypto');
 const validator = require('validator');
 const bcrypt = require("bcrypt");
 
-const { storeDataDoctor } = require("../../db/storeData");
 const getGMT7Date = require("../../service/getGMT7Date");
-const { isEmailUnique } = require("../../db/getDataDoc");
+const { isDocEmailUnique } = require("../../db/getDataDoc");
 const { isUsernameTooShort, isUsernameTooLong, isUsernameHasSymbol, validatePassword } = require("../../service/characterChecker");
 const sendVerificationEmail = require('../../verification/sendVerification');
 const uploadToBucket = require('../../service/uploadToBucket');
@@ -20,7 +19,7 @@ async function docRegistration(req, res) {
   }
 
   try {
-    const isEmailUniqueCheck = await isEmailUnique(email);
+    const isEmailUniqueCheck = await isDocEmailUnique(email);
 
     if (isUsernameTooShort(username)) {
       return res.status(400).json({ status: 'fail', message: 'Username is too short' });
@@ -63,6 +62,7 @@ async function docRegistration(req, res) {
 
       try {
         const uploadStatus = await uploadToBucket(res, req.file, newFilename, usecase, userType, Data);
+        await sendVerificationEmail('doctor', email, username, ID);
         return res.status(uploadStatus.statusCode).json(uploadStatus.response);
       } catch (uploadError) {
         console.error(uploadError);

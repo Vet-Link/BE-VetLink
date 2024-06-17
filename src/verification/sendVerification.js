@@ -14,9 +14,7 @@ async function sendVerificationEmail(userType, email, username, ID) {
         const createdAt = Firestore.FieldValue.serverTimestamp();
         const data = { createdAt, ID, token };
 
-
         await storeVerificationTokens(ID, data);
-        //db.collection('verificationTokens').doc(ID).set({ createdAt, ID, token});
 
         // Construct Verification URL
         const url = `http://localhost:8080/verify/${userType}/${ID}/${token}`;

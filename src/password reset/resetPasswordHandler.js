@@ -9,10 +9,17 @@ const resetPwMessage = require('./emailMessage');
 const { validatePassword } = require('../service/characterChecker');
 const { saveVerificationCode } = require('../db/storeData');
 const isTokenExpired = require('../service/jwtToken');
+const { isDocEmailUnique } = require('../db/getDataDoc');
 
 async function userResetPasswordReq(req, res) {
-    const { email } = req.body;
-    const isEmailUniqueCheck = await isEmailUnique(email);
+    const { userType, email } = req.body;
+    let isEmailUniqueCheck;
+    if (userType === 'user' ) {
+        isEmailUniqueCheck = await isEmailUnique(email);
+    } else if (userType === 'doctor') {
+        isEmailUniqueCheck = await isDocEmailUnique(email);
+    }
+    
     const date = new Date();
     const createdAt = new Date(date.getTime() + date.getTimezoneOffset() * 60000 + 7 * 60 * 60000).toISOString();
 
