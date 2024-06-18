@@ -1,7 +1,6 @@
 const { Firestore } = require('@google-cloud/firestore');
 const jwt = require("jsonwebtoken");
 const sendEmail = require('../service/sendEmail');
-//const db = require('../db/initializeDB');
 const verificationMessage = require('./emailMessage');
 const {storeVerificationTokens} = require('../db/storeData')
 
@@ -32,7 +31,6 @@ async function sendVerificationEmail(userType, email, username, ID) {
         console.error("Error sending verification email:", error);
         //throw error;
         return { success: false, message: "Failed to send verification email." };
-        
     } 
 }
 

@@ -17,6 +17,7 @@ async function emailLinkVerificator(req, res) {
       return res.status(400).send({ message: 'Invalid Link' });
     }
 
+    // If there is no user with current ID
     if (!userSnapshot.exists) {
       return res.status(400).send({ message: "Invalid Link" });
     }
@@ -27,14 +28,17 @@ async function emailLinkVerificator(req, res) {
       .where('token', '==', token)
       .get();
 
+    // If there is no token find based on ID
     if (tokenSnapshot.empty) {
       return res.status(400).send({ message: 'Invalid Link' });
     }
 
+    // Check if token is expired
     if(isTokenExpired(token)) {
       return res.status(403).send({ message: 'Token has expired' });
     }
 
+    // Verify jwt token
     jwt.verify(token, process.env.SECRETKEY, (err, user) => {
       if (err) {
         if (err.name === 'TokenExpiredError') {

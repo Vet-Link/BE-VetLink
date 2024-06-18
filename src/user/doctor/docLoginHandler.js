@@ -1,4 +1,4 @@
-const { isDocEmailUnique, searchDataByEmail } = require("../../db/getDataDoc");
+const { isDocEmailUnique, searchDocDataByEmail } = require("../../db/getDataDoc");
 const bcrypt = require("bcrypt");
 const validator = require('validator');
 const jwt = require("jsonwebtoken");
@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 async function docLogin(req, res) {
     const { email, password } = req.body;
     const isEmailRegistered = await isDocEmailUnique(email);
-    const userData = await searchDataByEmail(email);
+    const userData = await searchDocDataByEmail(email);
 
     try {
         //check if email is in valid format

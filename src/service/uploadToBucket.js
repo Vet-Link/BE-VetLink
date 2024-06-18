@@ -13,12 +13,14 @@ async function uploadToBucket(file, fileName, usecase, userType, Data) {
                 const publicUrl = `https://storage.googleapis.com/vetlink/${fileName}?t=${timestamp}`;
                 console.log(`File uploaded and publicly accessible at: ${publicUrl}`);
 
+                // Function usage
                 if (usecase === 'profile') {
                     Data.profileURL = publicUrl;
                 } else if (usecase === 'docRegis') {
                     Data.certificateURL = publicUrl;
                 }
 
+                // Check for user type
                 if (userType === 'user') {
                     await storeDataRegis(Data.ID, Data);
                 } else if (userType === 'doctor') {

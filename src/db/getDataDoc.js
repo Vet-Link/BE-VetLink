@@ -21,7 +21,7 @@ async function isDocEmailUnique(email) {
 }
 
 // Search data by email
-async function searchDataByEmail(email) {
+async function searchDocDataByEmail(email) {
   if (!email) {
     throw new Error("Email is undefined or null");
   }
@@ -44,5 +44,5 @@ async function searchDataByEmail(email) {
 
 module.exports = {
   isDocEmailUnique,
-  searchDataByEmail,
+  searchDocDataByEmail,
 }

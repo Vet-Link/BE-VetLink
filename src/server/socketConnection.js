@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const { saveMessageToDatabase } = require('../db/storeData');
 
 async function socketConnectionHandler(io, socket) {
+    // Build a private room based on user ID and doctor ID
     socket.on('joinConversation', ({ userID, doctorID, sender}) => {
         const conversationID = `${userID}_${doctorID}`;
         socket.join(conversationID);
@@ -10,6 +11,7 @@ async function socketConnectionHandler(io, socket) {
         io.to(conversationID).emit('chat-message', msgData);
     });
 
+    // Sending message to the assigned private room
     socket.on('sendMessage', async (data) => {
         const { conversationID, sender, message } = data;
         const msgData = { sender, message }

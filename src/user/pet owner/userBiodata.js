@@ -27,8 +27,8 @@ async function userLoadBiodata(req, res) {
 }
 
 async function userUpdateProfile(req, res) {
-    //const { email, newUsername } = req.body;
-    const { email } = req.body;
+    const { email, newUsername } = req.body;
+    //const { email } = req.body;
 
     try {
         // Retrieve current user data
