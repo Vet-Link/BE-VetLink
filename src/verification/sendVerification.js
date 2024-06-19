@@ -16,7 +16,7 @@ async function sendVerificationEmail(userType, email, username, ID) {
         await storeVerificationTokens(ID, data);
 
         // Construct Verification URL
-        const url = `http://localhost:8080/verify/${userType}/${ID}/${token}`;
+        const url = `${process.env.BE_URL}/verify/${userType}/${ID}/${token}`;
         
         // Compose Email Message
         const subject = "Please Verify Your Email From VetLink";

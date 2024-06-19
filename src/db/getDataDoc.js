@@ -42,7 +42,65 @@ async function searchDocDataByEmail(email) {
   }
 }
 
+// Get all doctor data
+async function getAllDocDataForTraining() {
+  const docCollection = db.collection('doctor-data');
+  try {
+    const snapshot = await docCollection
+      .orderBy("rating", "desc")
+      .get();
+
+    if (snapshot.empty) {
+      return "No doctor data found";
+    }
+
+    const doctorData = [];
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      doctorData.push({
+        ID: doc.id,
+        speciality: data.speciality,
+        rating: data.rating,
+        num_rating: data.num_rating,
+        time: data.time
+      });
+    });
+
+    return doctorData;
+  } catch (error) {
+    console.error("Cannot get all doctor data for training : " + error);
+    throw error;
+  }
+}
+
+// Get doctor data sorted by its score
+async function sortDoctorByScore() {
+  const docCollection = db.collection('doctor-data');
+  try {
+    const snapshot = await docCollection
+    .orderBy("score", "desc")
+    .get();
+
+  if (snapshot.empty) {
+    return "No doctor data found";
+  }
+
+  const doctorData = [];
+    snapshot.forEach(doc => {
+      doctorData.push({
+        ...doc.data()
+      });
+    });
+
+    return doctorData;
+  } catch (error) {
+    console.error("Cannot get all doctor data : " + error);
+    throw error;
+  }
+}
+
 module.exports = {
   isDocEmailUnique,
   searchDocDataByEmail,
+  getAllDocDataForTraining,
 }
