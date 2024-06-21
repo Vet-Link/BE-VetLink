@@ -11,7 +11,8 @@ const sendVerificationEmail = require('../../verification/sendVerification');
 async function userRegistration(req, res) {
     const { username, email, password, passwordVerify } = req.body;
     const time = getGMT7Date();
-    const ID = crypto.randomUUID();
+    const cryptoID = crypto.randomUUID().replace(/-/g, '');
+    const ID = `user_${cryptoID}`;
     const isEmailUniqueCheck = await isEmailUnique(email);
 
     try {

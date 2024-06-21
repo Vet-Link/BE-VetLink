@@ -1,7 +1,6 @@
 const { Firestore } = require('@google-cloud/firestore');
 const jwt = require("jsonwebtoken");
 const sendEmail = require('../service/sendEmail');
-//const db = require('../db/initializeDB');
 const verificationMessage = require('./emailMessage');
 const {storeVerificationTokens} = require('../db/storeData')
 
@@ -14,12 +13,10 @@ async function sendVerificationEmail(userType, email, username, ID) {
         const createdAt = Firestore.FieldValue.serverTimestamp();
         const data = { createdAt, ID, token };
 
-
         await storeVerificationTokens(ID, data);
-        //db.collection('verificationTokens').doc(ID).set({ createdAt, ID, token});
 
         // Construct Verification URL
-        const url = `http://localhost:8080/verify/${userType}/${ID}/${token}`;
+        const url = `${process.env.BE_URL}/verify/${userType}/${ID}/${token}`;
         
         // Compose Email Message
         const subject = "Please Verify Your Email From VetLink";
@@ -34,7 +31,6 @@ async function sendVerificationEmail(userType, email, username, ID) {
         console.error("Error sending verification email:", error);
         //throw error;
         return { success: false, message: "Failed to send verification email." };
-        
     } 
 }
 

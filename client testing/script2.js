@@ -10,7 +10,6 @@ const doctorID = prompt('what is your doctorID?')
 const conversationID = `${userID}_${doctorID}`
 const sender = userID;
 
-appendMessage('You joined')
 socket.emit('joinConversation', {userID, doctorID, sender})
 
 socket.on('chat-message', msgData => {

@@ -1,12 +1,12 @@
-const { isEmailUnique, searchDataByEmail } = require("../../db/getDataDoc");
+const { isDocEmailUnique, searchDocDataByEmail } = require("../../db/getDataDoc");
 const bcrypt = require("bcrypt");
 const validator = require('validator');
 const jwt = require("jsonwebtoken");
 
 async function docLogin(req, res) {
     const { email, password } = req.body;
-    const isEmailRegistered = await isEmailUnique(email);
-    const userData = await searchDataByEmail(email);
+    const isEmailRegistered = await isDocEmailUnique(email);
+    const userData = await searchDocDataByEmail(email);
 
     try {
         //check if email is in valid format
@@ -43,7 +43,7 @@ async function docLogin(req, res) {
         }
 
         // Generate JWT token
-        const token = jwt.sign({ email: userData.email, _id: userData.ID }, process.env.SECRETKEY, { expiresIn: "1h" });
+        const token = jwt.sign({ email: userData.email, _id: userData.ID }, process.env.SECRETKEY, { expiresIn: "30h" });
         return res.status(200).send({ 
             data: token, 
             message: "Doctor was successfully logged in" 

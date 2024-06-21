@@ -1,11 +1,10 @@
 const { Firestore } = require('@google-cloud/firestore');
+const keyFile = require('./service-key-firestore.json')
 
 const db = new Firestore({
   projectId: 'vetlink-425416',
-  keyFilename: './service-key-firestore.json',
-  databaseId: 'patient-db',
+  credentials: keyFile,
+  databaseId: 'patient-db'
 });
-
-//const bucket = storage.bucket("vetlink");
 
 module.exports =  db ;

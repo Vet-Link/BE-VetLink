@@ -1,6 +1,5 @@
 node_modules
 service-key-firestore.json
-storage-admin-key-vetlink.json
 Dockerfile
 keyfile.json
 deploy.sh

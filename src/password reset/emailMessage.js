@@ -22,7 +22,7 @@ const resetPwMessage = (verificationCode) => `
         </div>
         <div class="content">
             <h1>Password reset authentication</h1>
-            <h3>Never share this code anyone</h3>
+            <h3>Never share this code to anyone</h3>
             <p>Here is your verification code for your password reset:</p>
             <p>${verificationCode}</p>
         </div>
