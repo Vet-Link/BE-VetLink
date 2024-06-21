@@ -47,7 +47,6 @@ async function getAllDocDataForTraining() {
   const docCollection = db.collection('doctor-data');
   try {
     const snapshot = await docCollection
-      .orderBy("rating", "desc")
       .get();
 
     if (snapshot.empty) {
@@ -58,11 +57,11 @@ async function getAllDocDataForTraining() {
     snapshot.forEach(doc => {
       const data = doc.data();
       doctorData.push({
-        ID: doc.id,
-        speciality: data.speciality,
+        vet_name: doc.id,
+        specialty: data.speciality,
         rating: data.rating,
         num_rating: data.num_rating,
-        time: data.time
+        sign_in_time: data.time
       });
     });
 
@@ -99,8 +98,38 @@ async function sortDoctorByScore() {
   }
 }
 
+// Get recomended doctor
+async function getRecomendedDoctor() {
+  const docCollection = db.collection('doctor-data');
+  try {
+    const snapshot = await docCollection
+    .where("newcomer_status", "==", true)
+    .orderBy("score", "desc")
+    .limit(10)
+    .get();
+
+    if (snapshot.empty) {
+      return "No doctor data found";
+    }
+  
+    const doctorData = [];
+      snapshot.forEach(doc => {
+        doctorData.push({
+          ...doc.data()
+        });
+      });
+  
+    return doctorData;
+  } catch (error) {
+    console.error("Cannot get all doctor data : " + error);
+    throw error;
+  }
+}
+
 module.exports = {
   isDocEmailUnique,
   searchDocDataByEmail,
   getAllDocDataForTraining,
+  sortDoctorByScore,
+  getRecomendedDoctor,
 }

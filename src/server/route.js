@@ -10,6 +10,7 @@ const emailLinkVerificator = require('../verification/verifiedFromEmailLink');
 const { userResetPasswordReq, userResetPasswordVerification, userResetPasswordInput } = require('../password reset/resetPasswordHandler');
 const { userUpdateProfile, userLoadBiodata } = require('../user/pet owner/userBiodata');
 const { userAddPetData, loadPetProfile } = require('../user/pet owner/pet/petData');
+const { getRecomendedDoctorData, getAllDocRecomendation } = require('../user/doctor/getAllDoctorData');
 
 const multer = Multer({
     storage: Multer.memoryStorage(),
@@ -33,18 +34,21 @@ router.get('/verify/:userType/:id/:token', emailLinkVerificator);
 router.post('/docRegisUser', multer.single('imgfile'), docRegistration);
 router.post('/docLoginUser', docLogin);
 
-// User profile
-router.get('/userProfile', userLoadBiodata);
-router.put('/userProfile', multer.single('imgfile'), userUpdateProfile);
-
 // Forgot password routes
 router.post('/forgotPassword', userResetPasswordReq);
 router.post('/forgotPassword/verification', userResetPasswordVerification);
 router.put('/forgotPassword/verification/input', userResetPasswordInput);
 
+// User profile
+router.post('/userProfile', userLoadBiodata);
+router.put('/userProfile', multer.single('imgfile'), userUpdateProfile);
+
 // Pet route
 router.post('/addPet', userAddPetData);
 router.get('/showPet', loadPetProfile);
 
+// Doc route
+router.get('/docSorted', getAllDocRecomendation);
+router.get('/recomendedDoctor', getRecomendedDoctorData);
 
 module.exports = router;

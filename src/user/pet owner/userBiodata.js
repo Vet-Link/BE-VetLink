@@ -3,7 +3,11 @@ const uploadToBucket = require("../../service/uploadToBucket");
 
 async function userLoadBiodata(req, res) {
    const { email } = req.body;
+
    try {
+       if (email === undefined) {
+        return res.status(400).json({status: 'fail',message: 'Email must be included',});
+       }
        const userData = await getLatestUserDataByEmail(email);
        const username = userData.username;
        const profileUrl = userData.profileURL;

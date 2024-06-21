@@ -1,3 +1,4 @@
+const { CollectionGroup } = require("@google-cloud/firestore");
 const db = require("./initializeDB");
 
 async function storeDataRegis(ID, userDataRegis) {
@@ -25,12 +26,20 @@ async function saveVerificationCode(email, data) {
 async function storeDataDoctor(ID, doctorData) { 
   const Collection = db.collection('doctor-data');
   await Collection.doc(ID).set(doctorData);
+  await makeSpecialtyDirectory(ID, doctorData.speciality)
+}
+
+async function makeSpecialtyDirectory(ID, specialty) {
+  specialty.forEach(doc => {
+    const collectionPAth = `doctor-data/${ID}/doc_recom`;
+    Collection = db.collection(collectionPAth);
+    Collection.doc(doc).set({});
+  });
 }
 
 async function storeVerificationTokens(ID, data){
   const Collection = db.collection('verificationTokens');
   await Collection.doc(ID).set(data);
-
 }
 
 module.exports = {

@@ -12,7 +12,8 @@ async function docRegistration(req, res) {
   const { username, email, password, passwordVerify, speciality } = req.body;
   console.log(username, email, password, passwordVerify);
   const time = getGMT7Date();
-  const ID = crypto.randomUUID();
+  const cryptoID = crypto.randomUUID().replace(/-/g, '');
+  const ID = `vet_${cryptoID}`
 
   if (!username || !email || !password || !passwordVerify) {
     return res.status(400).json({ status: 'fail', message: 'All fields are required' });
@@ -45,7 +46,7 @@ async function docRegistration(req, res) {
       return res.status(400).json({ status: 'fail', message: 'Password do not match' });
     }
 
-    const emailResult = await sendVerificationEmail(email, username, ID);
+    const emailResult = await sendVerificationEmail('doctor', email, username, ID);
     if (!emailResult.success) {
       return res.status(500).json({ status: 'fail', message: 'Data failed to be registered. ' + emailResult.message });
     }
@@ -55,13 +56,13 @@ async function docRegistration(req, res) {
     const docData = { ID, username, email, speciality, hashedPassword, time };
 
     if (req.file) {
-      const newFilename = `vetCertificate/${ID}_profile_${Date.now()}_${blob.name}`;
+      const newFilename = `vetCertificate/${ID}_profile.jpg`;
       const usecase = 'docRegis';
       const userType = 'doctor';
       const Data = docData;
 
       try {
-        const uploadStatus = await uploadToBucket(res, req.file, newFilename, usecase, userType, Data);
+        const uploadStatus = await uploadToBucket(req.file, newFilename, usecase, userType, Data);
         await sendVerificationEmail('doctor', email, username, ID);
         return res.status(uploadStatus.statusCode).json(uploadStatus.response);
       } catch (uploadError) {

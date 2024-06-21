@@ -5,7 +5,8 @@ const { isUsernameTooShort, isUsernameHasSymbol, isUsernameTooLong } = require('
 
 async function userAddPetData (req, res) {
     const { ID, pet_name, pet_gender, pet_age, pet_species, pet_weight } = req.body;
-    const petId = crypto.randomUUID();
+    const cryptoID = crypto.randomUUID().replace(/-/g, '');
+    const petId = `pet_${cryptoID}`;
     const isPet_nameUnique = await isPetNameUnique(ID, pet_name);
 
     const petData = {

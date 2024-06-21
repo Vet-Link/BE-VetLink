@@ -17,10 +17,20 @@ const jsonToCsv = (jsonArray) => {
     jsonArray.forEach((jsonObj) => {
         const values = headers.map((header) => {
             let value = jsonObj[header];
+
+            // Handle array values
+            if (Array.isArray(value)) {
+                value = value.join(', ');
+            }
+
             // Ensure values are properly escaped if necessary
             if (typeof value === 'string') {
-                value = `"${value.replace(/"/g, '""')}"`;
+                // Only quote the string if it contains a comma, quote, or newline
+                if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+                    value = `"${value.replace(/"/g, '""')}"`;
+                }
             }
+
             return value;
         });
         csvRows.push(values.join(','));
@@ -32,12 +42,13 @@ const jsonToCsv = (jsonArray) => {
 
 async function uploadToBucket() {
     const Data = await getAllDocDataForTraining();
+    //console.log(Data);
     const ID = crypto.randomUUID();
     const fileName = `trainingData/${ID}.csv`
 
     // Convert JSON to CSV
     const csvContent = jsonToCsv(Data);
-    //console.log(csvContent);
+    console.log(csvContent);
 
     // Upload CSV file to Google Cloud Storage
     const blob = bucket.file(fileName);
